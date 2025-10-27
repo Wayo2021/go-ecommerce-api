@@ -11,5 +11,5 @@ func main() {
 	database.Connect()
 	r := gin.Default()
 	routes.ProductRoutes(r)
-	r.Run()
+	r.Run(":8082")
 }
