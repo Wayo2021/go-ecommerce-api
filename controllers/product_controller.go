@@ -14,6 +14,18 @@ func GetProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, products)
 }
 
+func GetProductByID(c *gin.Context) {
+	id := c.Param("id")
+	var product models.Product
+
+	if err := database.DB.First(&product, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Product not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, product)
+}
+
 func CreateProducts(c *gin.Context) {
 	var product models.Product
 	if err := c.ShouldBindJSON(&product); err != nil {
@@ -52,5 +64,8 @@ func DeleteProduct(c *gin.Context) {
 	}
 
 	database.DB.Delete(&product)
-	c.JSON(http.StatusOK, gin.H{"message": "Product deleted"})
+	c.JSON(http.StatusOK, gin.H{
+		"message":     "Product deleted",
+		"product id:": id,
+	})
 }
